@@ -73,7 +73,7 @@ $form = '
     </div>
 ';
 
-$logout = '<a href="./?logout">logout</a>';
+$logout = '<a href="./?logout">logout</a><br />';
 
 $setLogout = isset($_GET['logout']);
 if ($setLogout) $_SESSION['loginStatus'] = false;
@@ -96,6 +96,7 @@ if ($setLogout) $_SESSION['loginStatus'] = false;
     //login
     if ($_SESSION['loginStatus'] == true) {
         echo $logout;
+        echo 'welcome to do app!!';
     }
     //not login
     if ($_SESSION['loginStatus'] == false) {
