@@ -21,7 +21,9 @@ $sql = "
             user_id INT NOT NULL,
             status INT NOT NULL DEFAULT 0,
             contents VARCHAR(255) NOT NULL DEFAULT '',
-            
+            deadline date NOT NULL ,
+            created_at date NOT NULL, 
+            update_at date NOT NULL
         )";
 
 $res = $dbh->query($sql);
