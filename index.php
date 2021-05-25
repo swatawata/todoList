@@ -15,6 +15,17 @@ $sql = "
 
 $res = $dbh->query($sql);
 
+$sql = "
+        CREATE TABLE IF NOT EXISTS tasks(
+            id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            status INT NOT NULL DEFAULT 0,
+            contents VARCHAR(255) NOT NULL DEFAULT '',
+            
+        )";
+
+$res = $dbh->query($sql);
+
 $email = '';
 $password = '';
 $_SESSION['loginStatus'] = false;
