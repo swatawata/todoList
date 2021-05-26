@@ -9,7 +9,7 @@ $dbh = new PDO("mysql:host=localhost; dbname=todoList; charset=utf8", $db['user_
 $sql = "
         CREATE TABLE IF NOT EXISTS users (
             id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            email VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL
         )";
 
@@ -57,6 +57,9 @@ if ($clickButton) {
                 $_SESSION['email'] = '';
                 $_SESSION['error'] = '';
                 $_SESSION['loginStatus'] = true;
+                $_SESSION['userId'] = $value[0];
+                header("Location: ./todo.php");
+                exit;
             } else {
                 $_SESSION['email'] = $email;
                 $_SESSION['error'] = 'ログインできませんでした';
@@ -72,8 +75,6 @@ if ($clickButton) {
     }
 }
 
-
-
 $form = '
     <div>
         <form  action="./" method="POST">
@@ -86,10 +87,6 @@ $form = '
     </div>
 ';
 
-$logout = '<a href="./?logout">logout</a><br />';
-
-$setLogout = isset($_GET['logout']);
-if ($setLogout) $_SESSION['loginStatus'] = false;
 
 ?>
 
@@ -106,12 +103,6 @@ if ($setLogout) $_SESSION['loginStatus'] = false;
 <body>
     <h2>ログイン</h2>
     <?php
-    //login
-    if ($_SESSION['loginStatus'] == true) {
-        echo $logout;
-        echo 'welcome to do app!!';
-    }
-    //not login
     if ($_SESSION['loginStatus'] == false) {
         echo $form;
         echo $catchError;
