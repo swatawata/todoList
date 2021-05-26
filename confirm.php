@@ -24,17 +24,21 @@ if (isset($_POST["return"])) {
     exit;
 } elseif (isset($_POST["regist"])) {
 
-    $db['user_name'] = "root";
-    $db['password'] = "root";
+    try {
+        $db['user_name'] = "root";
+        $db['password'] = "root";
 
-    $dbh = new PDO("mysql:host=localhost; dbname=todoList; charset=utf8", $db['user_name'], $db['password']);
+        $dbh = new PDO("mysql:host=localhost; dbname=todoList; charset=utf8", $db['user_name'], $db['password']);
 
-    $sql = "INSERT INTO users(email, password) VALUES ('$email', '$hashedPassword')";
-    $res = $dbh->query($sql);
+        $sql = "INSERT INTO users(email, password) VALUES ('$email', '$hashedPassword')";
+        $res = $dbh->query($sql);
 
-    $_SESSION = [];
-    header("Location: ./end.php");
-    exit;
+        $_SESSION = [];
+        header("Location: ./end.php");
+        exit;
+    } catch(PDOException $error) {
+        echo "使用できない文字列があります";
+    }
 }
 
 
