@@ -20,10 +20,21 @@
         } elseif ($firstPassword == $secondPassword) {
             $_SESSION['email'] = $email;
             $_SESSION['password'] = $firstPassword;
-            header("Location: ./confirm.php");
-            exit;
         } elseif ($firstPassword != $secondPassword) {
             $catchError = 'パスワードが一致しません';
+        }
+
+        $db['user_name'] = "root";
+        $db['password'] = "root";
+
+        $dbh = new PDO("mysql:host=localhost; dbname=todoList; charset=utf8", $db['user_name'], $db['password']);
+
+        $sql = "select * from users where email='$_SESSION[email]'";
+        $res = $dbh->query($sql);
+        if ($res->rowCount() != 0) $catchError = "使用できない文字が含まれています";
+        else {
+            header("Location: ./confirm.php");
+            exit;
         }
     }
 

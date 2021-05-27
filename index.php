@@ -9,8 +9,21 @@ $dbh = new PDO("mysql:host=localhost; dbname=todoList; charset=utf8", $db['user_
 $sql = "
         CREATE TABLE IF NOT EXISTS users (
             id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            email VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL
+        )";
+
+$res = $dbh->query($sql);
+
+$sql = "
+        CREATE TABLE IF NOT EXISTS tasks(
+            id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            status INT NOT NULL DEFAULT 0,
+            contents VARCHAR(255) NOT NULL DEFAULT '',
+            deadline date NOT NULL ,
+            created_at date NOT NULL, 
+            update_at date NOT NULL
         )";
 
 $res = $dbh->query($sql);
@@ -44,6 +57,9 @@ if ($clickButton) {
                 $_SESSION['email'] = '';
                 $_SESSION['error'] = '';
                 $_SESSION['loginStatus'] = true;
+                $_SESSION['userId'] = $value[0];
+                header("Location: ./todo.php");
+                exit;
             } else {
                 $_SESSION['email'] = $email;
                 $_SESSION['error'] = 'ログインできませんでした';
@@ -51,10 +67,13 @@ if ($clickButton) {
                 exit;
             }
         }
+    } else {
+        $_SESSION['email'] = $email;
+        $_SESSION['error'] = 'ログインできませんでした';
+        header("Location: ./");
+        exit;
     }
 }
-
-
 
 $form = '
     <div>
@@ -68,10 +87,6 @@ $form = '
     </div>
 ';
 
-$logout = '<a href="./?logout">logout</a>';
-
-$setLogout = isset($_GET['logout']);
-if ($setLogout) $_SESSION['loginStatus'] = false;
 
 ?>
 
@@ -88,11 +103,6 @@ if ($setLogout) $_SESSION['loginStatus'] = false;
 <body>
     <h2>ログイン</h2>
     <?php
-    //login
-    if ($_SESSION['loginStatus'] == true) {
-        echo $logout;
-    }
-    //not login
     if ($_SESSION['loginStatus'] == false) {
         echo $form;
         echo $catchError;
